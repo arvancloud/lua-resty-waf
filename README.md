@@ -28,6 +28,7 @@ lua-resty-waf - High-performance WAF built on the OpenResty stack
 	* [allowed_content_types](#allowed_content_types)
 	* [debug](#debug)
 	* [debug_log_level](#debug_log_level)
+	* [denied_content_types](#denied_content_types)
 	* [deny_status](#deny_status)
 	* [disable_pcre_optimization](#disable_pcre_optimization)
 	* [event_log_altered_only](#event_log_altered_only)
@@ -521,6 +522,27 @@ Sets the nginx log level constant used for debug logging.
 location / {
     access_by_lua_block {
         waf:set_option("debug_log_level", ngx.DEBUG)
+    }
+}
+```
+
+### denied_content_types
+
+*Default*: none
+
+Defines one or more Content-Type headers that will be denied.
+
+*Example*:
+
+
+```lua
+location / {
+    access_by_lua_block {
+        -- define a single denied Content-Type value
+        waf:set_option("denied_content_types", "text/xml")
+
+        -- defines multiple denied Content-Type values
+        waf:set_option("denied_content_types", { "text/html", "text/json", "application/json" })
     }
 }
 ```

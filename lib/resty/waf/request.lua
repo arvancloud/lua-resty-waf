@@ -140,6 +140,8 @@ function _M.parse_request_body(waf, request_headers, collections)
 			--_LOG_"Request body size larger than client_body_buffer_size, ignoring request body"
 			return nil
 		end
+	elseif util.table_has_key(content_type_header, waf._denied_content_types) then
+		ngx.exit(ngx.HTTP_FORBIDDEN)
 	elseif util.table_has_key(content_type_header, waf._allowed_content_types) then
 		-- if the content type has been whitelisted by the user, set REQUEST_BODY as a string
 		ngx.req.read_body()

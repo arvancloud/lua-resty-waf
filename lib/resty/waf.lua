@@ -582,6 +582,7 @@ function _M.new()
 		_add_ruleset_string          = {},
 		_allow_unknown_content_types = false,
 		_allowed_content_types       = {},
+		_denied_content_types        = {},
 		_debug                       = false,
 		_debug_log_level             = ngx_INFO,
 		_deny_status                 = ngx_HTTP_FORBIDDEN,

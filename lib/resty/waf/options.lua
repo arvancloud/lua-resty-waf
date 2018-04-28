@@ -38,6 +38,9 @@ _M.lookup = {
 	allowed_content_types = function(waf, value)
 		waf._allowed_content_types[value] = true
 	end,
+	denied_content_types = function(waf, value)
+		waf._denied_content_types[value] = true
+	end,
 	res_body_mime_types = function(waf, value)
 		waf._res_body_mime_types[value] = true
 	end,
