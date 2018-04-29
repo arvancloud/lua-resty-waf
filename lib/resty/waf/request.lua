@@ -46,13 +46,14 @@ function _M.parse_request_body(waf, request_headers, collections)
 		local form, err = upload:new()
 		if not form then
 			logger.warn(waf, "failed to parse multipart request: ", err)
-			ngx.exit(400) -- may move this into a ruleset along with other strict checking
+			return
 		end
 
 		local FILES = {}
 		local FILES_NAMES = {}
 		local FILES_SIZES = {}
 		local FILES_TMP_CONTENT = {}
+		local key_values = nil
 
 		ngx.req.init_body()
 		form:set_timeout(1000)
@@ -89,6 +90,8 @@ function _M.parse_request_body(waf, request_headers, collections)
 				chunk = res
 				if lasttype == "header" then
 					ngx.req.append_body("\r\n\r\n")
+					if not key_values then key_values = {} end
+					key_values[file] = res
 				end
 
 				local chunk_size = #chunk
@@ -127,7 +130,7 @@ function _M.parse_request_body(waf, request_headers, collections)
 		collections.FILES_TMP_CONTENT = FILES_TMP_CONTENT
 		collections.FILES_COMBINED_SIZE = files_size
 
-		return nil
+		return key_values
 	elseif ngx.re.find(content_type_header, [=[^application/x-www-form-urlencoded]=], waf._pcre_flags) then
 		-- use the underlying ngx API to read the request body
 		-- ignore processing the request body if the content length is larger than client_body_buffer_size
