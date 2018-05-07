@@ -8,7 +8,6 @@ local logger        = require "resty.waf.log"
 local operators     = require "resty.waf.operators"
 local options       = require "resty.waf.options"
 local phase_t       = require "resty.waf.phase"
-local random        = require "resty.waf.random"
 local storage       = require "resty.waf.storage"
 local transform_t   = require "resty.waf.transform"
 local translate     = require "resty.waf.translate"
@@ -628,7 +627,7 @@ function _M.new()
 		_storage_redis_port          = 6379,
 		_storage_zone                = nil,
 		target_update_map            = {},
-		transaction_id               = random.random_bytes(10),
+		transaction_id               = "WAF_ID",
 		var_count                    = 0,
 		var                          = {},
 	}
