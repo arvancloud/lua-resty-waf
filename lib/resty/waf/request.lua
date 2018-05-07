@@ -167,17 +167,14 @@ function _M.parse_request_body(waf, request_headers, collections)
 end
 
 function _M.request_uri()
-	local request_line = {}
-	local is_args      = ngx.var.is_args
+	local is_args = ngx.var.is_args
+	local var = ngx.var
 
-	request_line[1] = ngx.var.uri
-
-	if is_args then
-		request_line[2] = is_args
-		request_line[3] = ngx.var.query_string
-	end
-
-	return table_concat(request_line, '')
+	return is_args and table_concat({
+		var.uri,
+		is_args,
+		var.query_string
+	}, '') or var.uri
 end
 
 function _M.request_uri_raw(request_line, method)
