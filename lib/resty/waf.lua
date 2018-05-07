@@ -268,6 +268,9 @@ local function _process_rule(self, rule, collections, ctx)
 
 	ctx.rule_status = nil
 
+	local op = operators.lookup[rule.operator]
+	local parse_dynamic_value = util.parse_dynamic_value
+
 	for k, v in ipairs(rule.vars) do
 		local var
 
@@ -285,7 +288,7 @@ local function _process_rule(self, rule, collections, ctx)
 		else
 			if opts.parsepattern then
 				--_LOG_"Parsing dynamic pattern: " .. pattern
-				pattern = util.parse_dynamic_value(self, pattern, collections)
+				pattern = parse_dynamic_value(self, pattern, collections)
 			end
 
 			local match, value
@@ -294,7 +297,7 @@ local function _process_rule(self, rule, collections, ctx)
 				match = true
 				value = 1
 			else
-				match, value = operators.lookup[rule.operator](self, collection, pattern, ctx)
+				match, value = op(self, collection, pattern, ctx)
 			end
 
 			if rule.op_negated then
