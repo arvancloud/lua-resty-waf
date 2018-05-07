@@ -185,8 +185,14 @@ function _M.request_uri_raw(request_line, method)
 end
 
 function _M.basename(waf, uri)
-	local m = ngx.re.match(uri, [=[(/[^/]*+)+]=], waf._pcre_flags)
-	return m[1]
+	local target = string.byte("/")
+	local last_index = 0
+	for idx = 1, #uri do
+		if uri:byte(idx) == target then
+			last_index = idx
+		end
+	end
+	return uri:sub(last_index)
 end
 
 function _M.cookies()
