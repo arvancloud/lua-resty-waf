@@ -128,7 +128,7 @@ _M.lookup = {
 		return ngx.md5_bin(value)
 	end,
 	normalise_path = function(waf, value)
-		while (ngx.re.match(value, [=[[^/][^/]*/\.\./|/\./|/{2,}]=], waf._pcre_flags)) do
+		while ngx.re.find(value, [=[[^/][^/]*/\.\./|/\./|/{2,}]=], waf._pcre_flags) do
 			value = ngx.re.gsub(value, [=[[^/][^/]*/\.\./|/\./|/{2,}]=], '/', waf._pcre_flags)
 		end
 		return value
