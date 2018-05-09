@@ -195,6 +195,33 @@ function _M.str_find(waf, subject, pattern)
 	return match, value
 end
 
+function _M.resub(waf, subject, pattern)
+	local opts = waf._pcre_flags
+	local captures, err, match, from, to
+
+	if type(subject) == "table" then
+		for _, v in ipairs(subject) do
+			match, captures = _M.regex(waf, v, pattern)
+
+			if match then
+				break
+			end
+		end
+	else
+		from, to, err = ngx.re.find(subject, pattern, opts)
+
+		if err then
+			logger.warn(waf, "error in ngx.re.find: " .. err)
+		end
+
+		if from then
+			return true, subject:sub(from, to)
+		end
+	end
+
+	return match, captures
+end
+
 function _M.regex(waf, subject, pattern)
 	local opts = waf._pcre_flags
 	local captures, err, match
@@ -498,6 +525,7 @@ end
 
 _M.lookup = {
 	REGEX        = function(waf, collection, pattern) return _M.regex(waf, collection, pattern) end,
+	RESUB        = function(waf, collection, pattern) return _M.resub(waf, collection, pattern) end,
 	REFIND       = function(waf, collection, pattern) return _M.refind(waf, collection, pattern) end,
 	EQUALS       = function(waf, collection, pattern) return _M.equals(collection, pattern) end,
 	GREATER      = function(waf, collection, pattern) return _M.greater(collection, pattern) end,
