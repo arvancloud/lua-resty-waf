@@ -49,7 +49,7 @@ function _M.initialize(waf, storage, col)
 	local altered = false
 
 	if #array == 0 then
-		--_LOG_"Initializing an empty collection for " .. col
+		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Initializing an empty collection for " .. col) end
 		storage[col] = {}
 	else
 		local data = redis:array_to_hash(array)
@@ -59,10 +59,10 @@ function _M.initialize(waf, storage, col)
 		-- the key for deletion via hdel when we persist
 		for key in pairs(data) do
 			if not key:find("__", 1, true) and data["__expire_" .. key] then
-				--_LOG_"checking " .. key
+				if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "checking " .. key) end
 				if tonumber(data["__expire_" .. key]) < ngx.now() then
 					-- do the actual removal
-					--_LOG_"Removing expired key: " .. key
+					if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Removing expired key: " .. key) end
 					data["__expire_" .. key] = nil
 					data[key] = nil
 
@@ -90,7 +90,7 @@ end
 
 function _M.persist(waf, col, data)
 	local serialized = cjson.encode(data)
-	--_LOG_'Persisting value: ' .. tostring(serialized)
+	if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', 'Persisting value: ' .. tostring(serialized)) end
 
 	local redis = redis_m:new()
 	local host  = waf._storage_redis_host
@@ -103,13 +103,13 @@ function _M.persist(waf, col, data)
 	end
 
 	redis:init_pipeline()
-	--_LOG_"Redis start pipeline"
+	if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Redis start pipeline") end
 
 	local col_name = _M.col_prefix .. col
 
 	-- build the hdel command to drop expired/deleted keys
 	if waf._storage_redis_delkey_n > 0 then
-		--_LOG_"Redis hdel"
+		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Redis hdel") end
 		for i=1, waf._storage_redis_delkey_n do
 			local k = waf._storage_redis_delkey[i]
 			redis:hdel(col_name, k)
@@ -118,7 +118,7 @@ function _M.persist(waf, col, data)
 
 	-- build the hmset command to save affected keys
 	if waf._storage_redis_setkey_t then
-		--_LOG_"Redis hmset"
+		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Redis hmset") end
 		redis:hmset(col_name, waf._storage_redis_setkey)
 	end
 

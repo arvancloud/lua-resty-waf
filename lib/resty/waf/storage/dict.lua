@@ -22,7 +22,7 @@ function _M.initialize(waf, storage, col)
 	altered    = false
 
 	if not serialized then
-		--_LOG_"Initializing an empty collection for " .. col
+		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Initializing an empty collection for " .. col) end
 		storage[col] = {}
 	else
 		local data = cjson.decode(serialized)
@@ -32,9 +32,9 @@ function _M.initialize(waf, storage, col)
 		-- internal expiry can't act on individual collection elements
 		for key in pairs(data) do
 			if not key:find("__", 1, true) and data["__expire_" .. key] then
-				--_LOG_"checking " .. key
+				if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "checking " .. key) end
 				if data["__expire_" .. key] < ngx.now() then
-					--_LOG_"Removing expired key: " .. key
+					if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Removing expired key: " .. key) end
 					data["__expire_" .. key] = nil
 					data[key] = nil
 					altered = true
@@ -56,7 +56,7 @@ function _M.persist(waf, col, data)
 	local shm        = ngx.shared[waf._storage_zone]
 	local serialized = cjson.encode(data)
 
-	--_LOG_'Persisting value: ' .. tostring(serialized)
+	if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', 'Persisting value: ' .. tostring(serialized)) end
 
 	local col_name = _M.col_prefix .. col
 

@@ -1,0 +1,1286 @@
+{
+    "access": [
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51001,
+            "msg": "Common SQL Comment Sequence",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(\\/\\*!?|\\*\\/|[';]--|--[\\s\\r\\n\\v\\f]|(?:--[^-]*?-))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51002,
+            "msg": "MySQL Comment Sequence",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(([^\\-&])#.*?[\\s\\r\\n\\v\\f])",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51003,
+            "msg": "MSAccess Comment Sequence",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(;?\\\\x00)",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51004,
+            "msg": "SQL Hex Encoding or Decoding",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(?:\\A|[^\\d])0x[a-f\\d]{3,}[a-f\\d]*)+|(HEX|RAWTOHEX|fn_varbintohexstr|BINTOSTR)\\s*\\(.*\\)|CONVERT_TO\\s*\\(\\(.*\\),'.*'\\)\\s*,\\s*'.*'|ASCII\\s*\\(\\s*SUBSTRING\\s*\\(|ASC\\s*\\(.*\\).*From",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51005,
+            "msg": "SQL String Termination with ' ",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(^[']+|[']+$)",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51006,
+            "msg": "SQL String Termination with `´",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(^[`´]+|[`´]+$)",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51007,
+            "msg": "SQL String Termination with ’‘",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(^[’‘]+|[’‘]+$)",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51008,
+            "msg": "SQL String Termination with ;",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(^[;]+|[;]+$)",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51009,
+            "msg": "SQL Basic Logic Operators",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(\\!\\=|\\&\\&|\\|\\||>>|<<|>=|<=|<>|<=>|xor|rlike|regexp|isnull))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51010,
+            "msg": "SQL ascii Logic Operators",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "((?:not\\s+between\\s+0\\s+and)|(?:is\\s+null)|(?:is\\s+not\\s+null)|(like\\s+null)|(?:(?:^|\\W)in[+\\s]*\\([\\s\\d\\\"]+[^()]*\\))|(rlike\\s+binary)|(regexp\\s+binary))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51011,
+            "msg": "SQL Tautologies",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:([\\s'\\\"`´’‘\\(\\)]*?)\\b([\\d\\w]+)([\\s'\\\"`´’‘\\(\\)]*?)(?:(?:=|<=>|r?like|sounds\\s+like|regexp)([\\s'\\\"`´’‘\\(\\)]*?)\\2\\b|(?:!=|<=|>=|<>|<|>|\\^|is\\s+not|not\\s+like|not\\s+regexp)([\\s'\\\"`´’‘\\(\\)]*?)(?!\\2)([\\d\\w]+)\\b))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51012,
+            "msg": "MSAccess Common database name detected",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:ms(?:ysaccessobjects|ysaces|ysobjects|ysqueries|ysrelationships|ysaccessstorage|ysaccessxml|ysmodules|ysmodules2))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51013,
+            "msg": "MSSQL Common database name detected",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:msdb|master\\.(\\.sys|dbo)|fn_(listextendedproperty|varbintohexstr)|schema(?:\\W*\\(|_name)|d(?:atabas|b_nam)e\\W*\\(|northwind|tempdb|@@(version|servername)|host_name\\s*\\()",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51014,
+            "msg": "MySQL Common database name detected",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:mysql\\.(?:db|user|func)|schema(?:\\W*\\(|_name)|d(?:atabas|b_nam)e\\W*\\(|(?:table|information)_schema|@@version|version\\s*\\()",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51015,
+            "msg": "PostgreSQL Common database name detected",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:pg_(user|proc|shadow|database|catalog|toast|description|class|(rel)?namespace)|version\\s*\\()",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51016,
+            "msg": "SQLite database name detected",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:sqlite((_temp)?_master)|_version\\s*\\())",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51017,
+            "msg": "Oracle database name detected",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "sys(?:\\.USER\\$\\s|\\.ALL_USERS\\s|aux\\s|\\.user_(?:(?:t(?:ab(?:_column|le)|rigger)|object|view)s|c(?:onstraints|atalog)|all_tables|tab))|NVL\\s*\\(|\\sROWNUM\\s|\\sv\\$version\\s|\\sFrom\\s*(DUAL\\s|DBA_SYS_PRIVS\\s|USER_SYS_PRIVS\\s|DBA_ROLE_PRIVS\\s|USER_ROLE_PRIVS\\s)",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51018,
+            "msg": "Common Blind SQL Injection attempt",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(?:\\b(?:(?:select\\b.{0,40}\\b(?:substring|users?|ascii))|m(?:sys(?:(?:queri|ac)e|relationship|column|object)s|ysql\\.(db|user))|c(?:onstraint_type|harindex)|waitfor\\b\\W*?\\bdelay|attnotnull)\\b|(?:locate|instr)\\W+\\()|\\@\\@spid\\b)|\\b(?:(?:s(?:ys(?:(?:(?:process|tabl)e|filegroup|object)s|c(?:o(?:nstraint|lumn)s|at)|dba|ibm)|ubstr(?:ing)?)|user_(?:(?:(?:constrain|objec)t|tab(?:_column|le)|ind_column|user)s|password|group)|a(?:tt(?:rel|typ)id|ll_objects)|object_(?:(?:nam|typ)e|id)|pg_(?:attribute|class)|column_(?:name|id)|xtype\\W+\\bchar|mb_users|rownum)\\b|t(?:able_name\\b|extpos\\W+\\()))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51019,
+            "msg": "MSSQL Blind SQL Injection attempt",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(?:\\b((substr(?:ing)?\\s*\\()|object_(?:(?:nam|typ)e|id)|column_(?:name|id)|xtype\\W+\\bchar|mb_users|waitfor\\b\\W*?\\bdelay)\\b|\\@\\@spid\\b)|table_name\\b|charindex\\s*((\\\" | ').*(\\\"|')\\s*, )",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51020,
+            "msg": "MSAccess Blind SQL Injection attempt",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:msys(?:(?:queri|ac)e|relationship|column|object)|\\sIIF\\s*\\(.*\\sselect)",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51021,
+            "msg": "Oracle Blind SQL Injection attempt",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:instr|constrain_type|\\b(?:(?:s(?:ys(?:(?:(?:process|tabl)e|filegroup|object)s|c(?:o(?:nstraint|lumn)s|at)|dba|ibm)|ubstr(?:ing)?)|user_(?:(?:(?:constrain|objec)t|tab(?:_column|le)|ind_column|user)s|password|group)|all_objects|rownum|From\\s+Dual)\\b|table_name\\b\\W+\\())",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51022,
+            "msg": "PostgreSQL Blind SQL Injection attempt",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:\\b(?:att(?:rel|typ)id|pg_(?:attribute|class)|textpos\\W+\\(|CASE.*WHEN.*THEN.*ELSE.*END)\\b)",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51023,
+            "msg": "MySQL Blind SQL Injection attempt",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(?:\\b(?:(?:select\\b.{0,40}\\b(?:count|substring|users?|ascii))|mysql\\.(db|user))\\b))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51024,
+            "msg": "SQL Injection attempt",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "\\b(?:and|or)\\b\\s*((\\d{1,10}|('|\\\")[^=]{1,10}('|\\\"))\\s*[=|<>]|(\\d{1,10}|[\\'\\\\\"][^=]{1,10}[\\'\\\\\"]) ?[=<>]+|(\\d{1,10}|('|\\\")[^=]{1,10}('|\\\")))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51025,
+            "msg": "SQL Injection payload",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(sleep\\((\\s*?)(\\d*?)(\\s*?)\\)|benchmark\\((.*?)\\,(.*?)\\)))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51026,
+            "msg": "MySQL Injection timebase",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(sleep\\((\\s*?)(\\d*?)(\\s*?)\\)|benchmark\\((.*?)\\,(.*?)\\)))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51027,
+            "msg": "Oracle Injection timebase",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(UTL_(HTTP|INADDR).(get_host_|REQUEST)|DBMS_LOCK.SLEEP)\\((\\s*?)(\\d*?)(\\s*?)\\))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51028,
+            "msg": "MySQL comment-/space-obfuscated injections and backtick termination",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(?:,.*?[)\\da-f'`´’‘]['`´’‘](?:['`´’‘].*?['`´’‘]|\\Z|[^'`´’‘]+))|(?:\\Wselect.+\\W*?from)|((?:select|create|rename|truncate|load|alter|delete|update|insert|desc)\\s*?\\(\\s*?space\\s*?\\())",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51029,
+            "msg": "Chained SQL injection",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(?:@.+=\\s*?\\(\\s*?select)|(?:\\d+\\s*?(x?or|div|like|between|and)\\s*?\\d+\\s*?[\\-+])|(?:\\/\\w+;?\\s+(?:having|and|x?or|div|like|between|and|select)\\W)|(?:\\d\\s+group\\s+by.+)|(?:(?:;|#|--).*(?:drop|alter|update|insert)\\s*?\\w{2,})|(?:(?:n?and|x?or|div|like|between|and|not|\\|\\||\\&\\&)[\\s(]+\\w+[\\s)]*?[!=+]+[\\s\\d]*?['`´’‘=()])) ",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51030,
+            "msg": "Conditional SQL injection",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(?:select.*[\\s()](case|iff)\\s*?\\()|(?:having\\s*?[^\\s]+\\s*?[^\\w\\s])|(?:if\\s?\\([\\d\\w]\\s*?[=<>~]))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51031,
+            "msg": "MySQL charset switch attempt",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?i:(?:alter\\s*?\\w+.*?character\\s+set\\s+\\w+))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51032,
+            "msg": "Oracle or DB2 MERGE, EXECUTE, IMMEDIATE, HAVING injections",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(?:merge.*?using\\s*?\\()|(execute\\s*?immediate\\s*?[\\\"'`´’‘])|(?:\\W+\\d*?\\s*?having\\s*?[^\\s\\-])|(?:match\\s*?[\\w(),+-]+\\s*?(against|with)\\s*?\\())",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51033,
+            "msg": "SQL injection (authentication bypass)",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(?:([' ](.*?)[or|and](.*?)[' \\d]+.*((>|<)=?|<>|=|!=|like|rlike|regexp|isnull))))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51034,
+            "msg": "Common SQL injection",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(?:(union(.*?)select(.*?))))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51035,
+            "msg": "Posgres pg_sleep injection",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(?:select\\s*?pg_sleep)|(?:waitfor\\s*?delay\\s?[\\\"'`´’‘]+\\s?\\d))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51036,
+            "msg": "MySQL comment and char injection",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(?:\\/\\*!\\s?\\d+)|(?:ch(?:a)?r\\s*?\\(\\s*?\\d))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51037,
+            "msg": "SQL probing attempt",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(?:['`´’‘]\\s*?(x?or|div|like|between|and)\\s*?['`´’‘])|(?:(?:^['`´’‘\\\\]*?(?:[\\d\\\"'`´’‘]+|[^'`´’‘]+['`´’‘]))+\\s*?(?:n?and|x?or|div|like|between|and|not|\\|\\||\\&\\&)\\s*?[\\w'`´’‘][+&!@(),.-])|(?:@[\\w-]+\\s+(and|x?or|div|like|between|and)\\s*?[^\\w\\s])|(?:[^\\w\\s:]\\s*?\\d\\W+[^\\w\\s]\\s*?[\\\"'`´’‘].))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51038,
+            "msg": " SQL injection (authentication bypass)",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(?:in\\s*?\\(+\\s*?select)|(?:(?:n?and|x?x?or|div|like|between|and|not|\\|\\||\\&\\&)\\s+[\\s\\w+]+(?:regexp\\s*?\\(|sounds\\s+like\\s*?[\\\"'`´’‘]|[=\\d]+x))|(?:[\\\"'`´’‘][\\%&<>^=]+\\d\\s*?(=|x?or|div|like|between|and))|(?:[\\\"'`´’‘]\\s*?is\\s*?[\\d.]+\\s*?\\W.*?[\\\"'`´’‘]))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51039,
+            "msg": "Concatenated SQL injection / SQLLFI",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(?:[\\d\\W]\\s+as\\s*?[\\\"'`´’‘\\w]+\\s*?from)|(?:^[\\W\\d]+\\s*?(?:union|select|create|rename|truncate|load|alter|delete|update|insert|desc))|(?:(?:select|create|rename|truncate|load|alter|delete|update|insert|desc)\\s+(?:(?:group_)?concat|char|load_file)\\s?\\(?)|(?:end\\s*?\\);)|([\\\"'`´’‘]\\s+regexp\\W)|(?:select.*[\\s(]load_file\\s*?\\())",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        },
+        {
+            "actions": {
+                "disrupt": "SCORE",
+                "nondisrupt": [
+                    {
+                        "action": "setvar",
+                        "data": {
+                            "col": "TX",
+                            "inc": 1,
+                            "key": "anomaly_score",
+                            "value": 4
+                        }
+                    }
+                ]
+            },
+            "id": 51040,
+            "msg": "SQL probing attempt",
+            "operator": "REFIND",
+            "opts": {
+                "transform": "uri_decode"
+            },
+            "pattern": "(?:(?:['`´’‘]\\s*?\\*.+(?:x?or|div|r?like|between|and)\\W*?['`´’‘]\\d)|(?:[\\\"'`´’‘]\\s*?(x?or|div|r?like|between|and)[-#\\/\\(\\)\\s]+[^\\d]+[\\w-]+.*?\\d))",
+            "vars": [
+                {
+                    "parse": [
+                        "all",
+                        1
+                    ],
+                    "type": "REQUEST_ARGS"
+                }
+            ]
+        }
+    ],
+    "body_filter": {},
+    "header_filter": {}
+}

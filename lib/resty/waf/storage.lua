@@ -19,7 +19,7 @@ function _M.initialize(waf, storage, col)
 
 	local backend_m = require("resty.waf.storage." .. backend)
 
-	--_LOG_"Initializing storage type " .. backend
+	if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Initializing storage type " .. backend) end
 
 	backend_m.initialize(waf, storage, col)
 end
@@ -27,7 +27,7 @@ end
 function _M.set_var(waf, ctx, element, value)
 	local col = ctx.col_lookup[string_upper(element.col)]
 	if not col then
-		--_LOG_element.col .. " not initialized"
+		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', element.col .. " not initialized") end
 		return
 	end
 
@@ -41,19 +41,19 @@ function _M.set_var(waf, ctx, element, value)
 		if existing and type(existing) ~= "number" then
 			logger.fatal_fail("Cannot increment a value that was not previously a number")
 		elseif not existing then
-			--_LOG_"Incrementing a non-existing value"
+			if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Incrementing a non-existing value") end
 			existing = 0
 		end
 
 		if type(value) == "number" then
 			value = value + existing
 		else
-			--_LOG_"Failed to increment a non-number, falling back to existing value"
+			if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Failed to increment a non-number, falling back to existing value") end
 			value = existing
 		end
 	end
 
-	--_LOG_"Setting " .. col .. ":" .. key .. " to " .. value
+	if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Setting " .. col .. ":" .. key .. " to " .. value) end
 
 	-- save data to in-memory table
 	-- data not in the TX col will be persisted at the end of the phase
@@ -70,7 +70,7 @@ end
 function _M.expire_var(waf, ctx, element, value)
 	local col = ctx.col_lookup[string_upper(element.col)]
 	if not col then
-		--_LOG_element.col .. " not initialized"
+		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', element.col .. " not initialized") end
 		return
 	end
 
@@ -78,7 +78,7 @@ function _M.expire_var(waf, ctx, element, value)
 	local storage = ctx.storage
 	local expire  = ngx.now() + value
 
-	--_LOG_"Expiring " .. element.col .. ":" .. element.key .. " in " .. value
+	if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Expiring " .. element.col .. ":" .. element.key .. " in " .. value) end
 
 	storage[col]["__expire_" .. key] = expire
 	storage[col]["__altered"]        = true
@@ -86,21 +86,21 @@ function _M.expire_var(waf, ctx, element, value)
 	-- track which keys to write to redis
 	if waf._storage_backend == 'redis' then
 		waf._storage_redis_setkey['__expire_' .. key] = expire
-		--_LOG_cjson.encode(waf._storage_redis_setkey)
+		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', cjson.encode(waf._storage_redis_setkey)) end
 	end
 end
 
 function _M.delete_var(waf, ctx, element)
 	local col = ctx.col_lookup[string_upper(element.col)]
 	if not col then
-		--_LOG_element.col .. " not initialized"
+		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', element.col .. " not initialized") end
 		return
 	end
 
 	local key     = element.key
 	local storage = ctx.storage
 
-	--_LOG_"Deleting " .. col .. ":" .. key
+	if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Deleting " .. col .. ":" .. key) end
 
 	if storage[col][key] then
 		storage[col][key]         = nil
@@ -112,7 +112,7 @@ function _M.delete_var(waf, ctx, element)
 			waf._storage_redis_delkey[waf._storage_redis_delkey_n] = key
 		end
 	else
-		--_LOG_key .. " was not found in " .. col
+		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', key .. " was not found in " .. col) end
 	end
 end
 
@@ -128,17 +128,17 @@ function _M.persist(waf, storage)
 		logger.fatal_fail(backend .. " is not a valid persistent storage backend")
 	end
 
-	--_LOG_'Persisting storage type ' .. backend
+	if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', 'Persisting storage type ' .. backend) end
 
 	for col in pairs(storage) do
 		if col ~= 'TX' then
-			--_LOG_'Examining ' .. col
+			if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', 'Examining ' .. col) end
 
 			if storage[col]["__altered"] then
 				storage[col]["__altered"] = nil -- dont need to persist this flag
 				backend_m.persist(waf, col, storage[col])
 			else
-				--_LOG_"Not persisting a collection that wasn't altered"
+				if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Not persisting a collection that wasn't altered") end
 			end
 		end
 	end
