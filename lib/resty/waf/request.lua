@@ -19,7 +19,7 @@ function _M.parse_request_body(waf, request_headers, collections)
 	-- or result from misconfigured proxies. may consider relaxing
 	-- this or adding an option to disable this checking in the future
 	if type(content_type_header) == "table" then
-		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Request contained multiple content-type headers, bailing!") end
+		--_LOG_"Request contained multiple content-type headers, bailing!"
 		ngx.exit(400)
 	end
 
@@ -28,11 +28,11 @@ function _M.parse_request_body(waf, request_headers, collections)
 	-- but its necessary for us to properly handle the request
 	-- and its likely a sign of nogoodnickery anyway
 	if not content_type_header then
-		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Request has no content type, ignoring the body") end
+		--_LOG_"Request has no content type, ignoring the body"
 		return nil
 	end
 
-	if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Examining content type " .. content_type_header) end
+	--_LOG_"Examining content type " .. content_type_header
 
 	-- handle the request body based on the Content-Type header
 	-- multipart/form-data requests will be streamed in via lua-resty-upload,
@@ -62,7 +62,7 @@ function _M.parse_request_body(waf, request_headers, collections)
 		ngx.req.append_body("--" .. form.boundary)
 
 		-- this is gonna need some tlc, but it seems to work for now
-		local lasttype, chunk, file, body, body_size, files_size
+		local lasttype, chunk, file, body, body_size, files_size, is_file
 		files_size = 0
 		body_size  = 0
 		body = ''
@@ -81,7 +81,12 @@ function _M.parse_request_body(waf, request_headers, collections)
 					table.insert(FILES_NAMES, file)
 
 					s, f = header:find('filename="([^"]+")')
-					if s then table.insert(FILES, header:sub(s + 10, f - 1)) end
+					if s then 
+						table.insert(FILES, header:sub(s + 10, f - 1))
+						is_file = true
+					else
+						is_file = false
+					end
 				end
 
 				chunk = res[3] -- form:read() returns { key, value, line } here
@@ -90,8 +95,10 @@ function _M.parse_request_body(waf, request_headers, collections)
 				chunk = res
 				if lasttype == "header" then
 					ngx.req.append_body("\r\n\r\n")
-					if not key_values then key_values = {} end
-					key_values[file] = res
+					if not is_file then
+						if not key_values then key_values = {} end
+						key_values[file] = res
+					end
 				end
 
 				local chunk_size = #chunk
@@ -99,7 +106,7 @@ function _M.parse_request_body(waf, request_headers, collections)
 				body = body .. chunk
 				body_size = body_size + #chunk
 
-				if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "c:" .. chunk_size .. ", b:" .. body_size) end
+				--_LOG_"c:" .. chunk_size .. ", b:" .. body_size
 
 				ngx.req.append_body(chunk)
 			elseif typ == "part_end" then
@@ -140,7 +147,7 @@ function _M.parse_request_body(waf, request_headers, collections)
 		if ngx.req.get_body_file() == nil then
 			return ngx.req.get_post_args()
 		else
-			if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Request body size larger than client_body_buffer_size, ignoring request body") end
+			--_LOG_"Request body size larger than client_body_buffer_size, ignoring request body"
 			return nil
 		end
 	elseif util.table_has_key(content_type_header, waf._denied_content_types) then
@@ -152,15 +159,15 @@ function _M.parse_request_body(waf, request_headers, collections)
 		if ngx.req.get_body_file() == nil then
 			return ngx.req.get_body_data()
 		else
-			if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Request body size larger than client_body_buffer_size, ignoring request body") end
+			--_LOG_"Request body size larger than client_body_buffer_size, ignoring request body"
 			return nil
 		end
 	else
 		if waf._allow_unknown_content_types then
-			if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Allowing request with content type " .. tostring(content_type_header)) end
+			--_LOG_"Allowing request with content type " .. tostring(content_type_header)
 			return nil
 		else
-			if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', tostring(content_type_header) .. " not a valid content type!") end
+			--_LOG_tostring(content_type_header) .. " not a valid content type!"
 			ngx.exit(ngx.HTTP_FORBIDDEN)
 		end
 	end

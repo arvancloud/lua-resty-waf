@@ -147,7 +147,7 @@ function _M.parse_dynamic_value(waf, key, collections)
 
 	local str = string_gsub(key, "%%%b{}", lookup)
 
-	if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Parsed dynamic value is " .. str) end
+	--_LOG_"Parsed dynamic value is " .. str
 
 	return tonumber(str) and tonumber(str) or str
 end
@@ -225,16 +225,16 @@ end
 -- parse collection elements based on a given directive
 _M.parse_collection = {
 	specific = function(waf, collection, value)
-		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Parse collection is getting a specific value: " .. value) end
+		--_LOG_"Parse collection is getting a specific value: " .. value
 		return collection[value]
 	end,
 	regex = function(waf, collection, value)
-		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Parse collection is geting the regex: " .. value) end
+		--_LOG_"Parse collection is geting the regex: " .. value
 		local v
 		local n = 0
 		local _collection = {}
 		for k, _ in pairs(collection) do
-			if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "checking " .. k) end
+			--_LOG_"checking " .. k
 			if ngx.re.find(k, value, waf._pcre_flags) then
 				v = collection[k]
 				if type(v) == "table" then
@@ -251,11 +251,11 @@ _M.parse_collection = {
 		return _collection
 	end,
 	keys = function(waf, collection)
-		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Parse collection is getting the keys") end
+		--_LOG_"Parse collection is getting the keys"
 		return _M.table_keys(collection)
 	end,
 	values = function(waf, collection)
-		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Parse collection is getting the values") end
+		--_LOG_"Parse collection is getting the values"
 		return _M.table_values(collection)
 	end,
 	all = function(waf, collection)
@@ -275,15 +275,15 @@ _M.parse_collection = {
 
 _M.sieve_collection = {
 	ignore = function(waf, collection, value)
-		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Sieveing specific value " .. value) end
+		--_LOG_"Sieveing specific value " .. value
 		collection[value] = nil
 	end,
 	regex = function(waf, collection, value)
-		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Sieveing regex value " .. value) end
+		--_LOG_"Sieveing regex value " .. value
 		for k, _ in pairs(collection) do
-			if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Checking " .. k) end
+			--_LOG_"Checking " .. k
 			if ngx.re.find(k, value, waf._pcre_flags) then
-				if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Removing " .. k) end
+				--_LOG_"Removing " .. k
 				collection[k] = nil
 			end
 		end

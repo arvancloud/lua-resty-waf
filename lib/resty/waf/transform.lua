@@ -59,20 +59,20 @@ end
 
 _M.lookup = {
 	base64_decode = function(waf, value)
-		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Decoding from base64: " .. tostring(value)) end
+		--_LOG_"Decoding from base64: " .. tostring(value)
 		local t_val = ngx.decode_base64(tostring(value))
 		if t_val then
-			if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Decode successful, decoded value is " .. t_val) end
+			--_LOG_"Decode successful, decoded value is " .. t_val
 			return t_val
 		else
-			if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Decode unsuccessful, returning original value " .. value) end
+			--_LOG_"Decode unsuccessful, returning original value " .. value
 			return value
 		end
 	end,
 	base64_encode = function(waf, value)
-		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Encoding to base64: " .. tostring(value)) end
+		--_LOG_"Encoding to base64: " .. tostring(value)
 		local t_val = ngx.encode_base64(value)
-		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "Encoded value is " .. t_val) end
+		--_LOG_"Encoded value is " .. t_val
 		return t_val
 	end,
 	css_decode = function(waf, value)
@@ -105,7 +105,7 @@ _M.lookup = {
 	end,
 	html_decode = function(waf, value)
 		local str = hdec.decode(value)
-		if waf._debug == true then ngx.log(waf._debug_log_level, '[', waf.transaction_id, '] ', "html decoded value is " .. str) end
+		--_LOG_"html decoded value is " .. str
 		return str
 	end,
 	js_decode = function(waf, value)
