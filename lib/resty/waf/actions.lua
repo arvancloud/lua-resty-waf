@@ -89,9 +89,9 @@ _M.nondisruptive_lookup = {
 		-- this lookup table holds
 		local meta_rules = waf._meta_exception.meta_ids[ctx.id] or {}
 
-		for i, id in ipairs(meta_rules) do
+		for i = 1, #meta_rules do
 			--_LOG_"Runtime ignoring rule " .. id
-			waf._ignore_rule[id] = true
+			waf._ignore_rule[meta_rules[i]] = true
 		end
 	end,
 	mode_update = function(waf, mode)

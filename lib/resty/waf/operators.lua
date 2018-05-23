@@ -27,8 +27,8 @@ function _M.equals(a, b)
 	local equals, value
 
 	if type(a) == "table" then
-		for _, v in ipairs(a) do
-			equals, value = _M.equals(v, b)
+		for i = 1, #a do
+			equals, value = _M.equals(a[i], b)
 			if equals then
 				break
 			end
@@ -48,8 +48,8 @@ function _M.greater(a, b)
 	local greater, value
 
 	if type(a) == "table" then
-		for _, v in ipairs(a) do
-			greater, value = _M.greater(v, b)
+		for i = 1, #a do
+			greater, value = _M.greater(a[i], b)
 			if greater then
 				break
 			end
@@ -69,8 +69,8 @@ function _M.less(a, b)
 	local less, value
 
 	if type(a) == "table" then
-		for _, v in ipairs(a) do
-			less, value = _M.less(v, b)
+		for i = 1, #a do
+			less, value = _M.less(a[i], b)
 			if less then
 				break
 			end
@@ -90,8 +90,8 @@ function _M.greater_equals(a, b)
 	local greater_equals, value
 
 	if type(a) == "table" then
-		for _, v in ipairs(a) do
-			greater_equals, value = _M.greater_equals(v, b)
+		for i = 1, #a do
+			greater_equals, value = _M.greater_equals(a[i], b)
 			if greater_equals then
 				break
 			end
@@ -111,8 +111,8 @@ function _M.less_equals(a, b)
 	local less_equals, value
 
 	if type(a) == "table" then
-		for _, v in ipairs(a) do
-			less_equals, value = _M.less_equals(v, b)
+		for i = 1, #a do
+			less_equals, value = _M.less_equals(a[i], b)
 			if less_equals then
 				break
 			end
@@ -132,8 +132,8 @@ function _M.exists(needle, haystack)
 	local exists, value
 
 	if type(needle) == "table" then
-		for _, v in ipairs(needle) do
-			exists, value = _M.exists(v, haystack)
+		for i = 1, #needle do
+			exists, value = _M.exists(needle[i], haystack)
 
 			if exists then
 				break
@@ -154,8 +154,8 @@ function _M.contains(haystack, needle)
 	local contains, value
 
 	if type(needle) == "table" then
-		for _, v in ipairs(needle) do
-			contains, value = _M.contains(haystack, v)
+		for i = 1, #needle do
+			contains, value = _M.contains(haystack, needle[i])
 
 			if contains then
 				break
@@ -176,8 +176,8 @@ function _M.str_find(waf, subject, pattern)
 	local from, to, match, value
 
 	if type(subject) == "table" then
-		for _, v in ipairs(subject) do
-			match, value = _M.str_find(waf, v, pattern)
+		for i = 1, #subject do
+			match, value = _M.str_find(waf, subject[i], pattern)
 
 			if match then
 				break
@@ -200,8 +200,8 @@ function _M.resub(waf, subject, pattern)
 	local captures, err, match, from, to
 
 	if type(subject) == "table" then
-		for _, v in ipairs(subject) do
-			match, captures = _M.regex(waf, v, pattern)
+		for i = 1, #subject do
+			match, captures = _M.regex(waf, subject[i], pattern)
 
 			if match then
 				break
@@ -227,8 +227,8 @@ function _M.regex(waf, subject, pattern)
 	local captures, err, match
 
 	if type(subject) == "table" then
-		for _, v in ipairs(subject) do
-			match, captures = _M.regex(waf, v, pattern)
+		for i = 1, #subject do
+			match, captures = _M.regex(waf, subject[i], pattern)
 
 			if match then
 				break
@@ -254,8 +254,8 @@ function _M.refind(waf, subject, pattern)
 	local from, to, err, match
 
 	if type(subject) == "table" then
-		for _, v in ipairs(subject) do
-			match, from = _M.refind(waf, v, pattern)
+		for i = 1, #subject do
+			match, from = _M.refind(waf, subject[i], pattern)
 
 			if match then
 				break
@@ -290,8 +290,8 @@ function _M.ac_lookup(needle, haystack, ctx)
 	end
 
 	if type(needle) == "table" then
-		for _, v in ipairs(needle) do
-			match, value = _M.ac_lookup(v, haystack, ctx)
+		for i = 1, #needle do
+			match, value = _M.ac_lookup(needle[i], haystack, ctx)
 
 			if match then
 				break
@@ -317,7 +317,9 @@ function _M.cidr_match(ip, cidr_pattern)
 		cidr_pattern = { cidr_pattern }
 	end
 
-	for _, v in ipairs(cidr_pattern) do
+	for i = 1, #cidr_pattern do
+		local v = cidr_pattern[i]
+
 		-- try to grab the parsed cidr from out module cache
 		local cidr = _cidr_cache[v]
 
@@ -391,8 +393,8 @@ end
 
 function _M.detect_sqli(input)
 	if type(input) == 'table' then
-		for _, v in ipairs(input) do
-			local match, value = _M.detect_sqli(v)
+		for i = 1, #input do
+			local match, value = _M.detect_sqli(input[i])
 
 			if match then
 				return match, value
@@ -409,8 +411,8 @@ end
 
 function _M.detect_xss(input)
 	if type(input) == 'table' then
-		for _, v in ipairs(input) do
-			local match, value = _M.detect_xss(v)
+		for i = 1, #input do
+			local match, value = _M.detect_xss(input[i])
 
 			if match then
 				return match, value
@@ -431,8 +433,8 @@ end
 
 function _M.str_match(input, pattern)
 	if type(input) == 'table' then
-		for _, v in ipairs(input) do
-			local match, value = _M.str_match(v, pattern)
+		for i = 1, #input do
+			local match, value = _M.str_match(input[i], pattern)
 
 			if match then
 				return match, value

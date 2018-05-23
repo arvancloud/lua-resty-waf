@@ -261,13 +261,15 @@ _M.parse_collection = {
 	all = function(waf, collection)
 		local n = 0
 		local _collection = {}
-		for _, key in ipairs(_M.table_keys(collection)) do
+		local _M_table_keys_collection = _M.table_keys(collection)
+		for i = 1, #_M_table_keys_collection do
 			n = n + 1
-			_collection[n] = key
+			_collection[n] = _M_table_keys_collection[i]
 		end
-		for _, value in ipairs(_M.table_values(collection)) do
+		local _M_table_values_collection = _M.table_values(collection)
+		for i = 1, #_M_table_values_collection do
 			n = n + 1
-			_collection[n] = value
+			_collection[n] = _M_table_values_collection[i]
 		end
 		return _collection
 	end
@@ -299,21 +301,21 @@ function _M.rule_exception(exception_table, rule)
 	local ids   = {}
 	local count = 0
 
-	for i, exception in ipairs(rule.exceptions) do
+	for i = 1, #rule.exceptions do
 		for key, rules in pairs(exception_table.msgs) do
-			if re_find(key, exception, 'jo') then
-				for j, id in ipairs(rules) do
+			if re_find(key, rule.exceptions[i], 'jo') then
+				for j = 1, #rules do
 					count = count + 1
-					ids[count] = id
+					ids[count] = rules[j]
 				end
 			end
 		end
 
 		for key, rules in pairs(exception_table.tags) do
 			if re_find(key, exception, 'jo') then
-				for j, id in ipairs(rules) do
+				for j = 1, #rules do
 					count = count + 1
-					ids[count] = id
+					ids[count] = rules[j]
 				end
 			end
 		end

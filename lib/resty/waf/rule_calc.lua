@@ -21,8 +21,8 @@ end
 local function _ignore_collection_key(ignore)
 	local t = {}
 
-	for i, j in ipairs(ignore) do
-		t[i + 1] = table_concat(j, ',')
+	for i = 1, #ignore do
+		t[i + 1] = table_concat(ignore[i], ',')
 	end
 
 	return table_concat(t, ',')
@@ -94,7 +94,7 @@ function _M.calculate(ruleset, meta_lookup)
 
 		chain[#chain + 1] = rule
 
-		for i in ipairs(rule.vars) do
+		for i = 1, #rule.vars do
 			local var = rule.vars[i]
 			var.collection_key = _build_collection_key(var, rule.opts.transform)
 		end
@@ -139,7 +139,8 @@ function _M.calculate(ruleset, meta_lookup)
 			end
 
 			if rule.tag then
-				for _, tag in ipairs(rule.tag) do
+				for m = 1, #rule.tag do
+					local tag = rule.tag[m]
 					if not meta_lookup.tags[tag] then
 						meta_lookup.tags[tag] = { rule.id }
 					else

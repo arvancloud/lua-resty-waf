@@ -64,8 +64,8 @@ local function _build_exception_table()
 
 	for r, ruleset in pairs(_ruleset_defs) do
 		for phase, rules in pairs(ruleset) do
-			for i, rule in ipairs(rules) do
-				util.rule_exception(_M._meta_exception, rule)
+			for i = 1, #rules do
+				util.rule_exception(_M._meta_exception, rules[i])
 			end
 		end
 	end
@@ -96,11 +96,9 @@ local function _parse_collection(self, collection, var)
 	if var.ignore then
 		local collection_copy = util.table_copy(collection)
 
-		for _, ignore in ipairs(var.ignore) do
-			local ikey   = ignore[1]
-			local ivalue = ignore[2]
-
-			util.sieve_collection[ikey](self, collection_copy, ivalue)
+		for i = 1, #var.ignore do
+			local ignore = var.ignore[i]
+			util.sieve_collection[ignore[1]](self, collection_copy, ignore[2])
 		end
 
 		return util.parse_collection[key](self, collection_copy, value)
@@ -193,7 +191,7 @@ local function _do_transform(self, collection, transform)
 	if type(transform) == "table" then
 		t = collection
 
-		for k, v in ipairs(transform) do
+		for k = 1, #transform do
 			t = _do_transform(self, t, transform[k])
 		end
 	else
@@ -270,7 +268,7 @@ local function _process_rule(self, rule, collections, ctx)
 	local op = operators.lookup[rule.operator]
 	local parse_dynamic_value = util.parse_dynamic_value
 
-	for k, v in ipairs(rule.vars) do
+	for k = 1, #rule.vars do
 		local var
 
 		if self.target_update_map[rule.id] then
@@ -322,7 +320,7 @@ local function _process_rule(self, rule, collections, ctx)
 				if not rule.op_negated then
 					if rule.operator == "REGEX" then
 						collections.TX["0"] = value[0]
-						for i in ipairs(value) do
+						for i = 1, #value do
 							collections.TX[tostring(i)] = value[i]
 						end
 					else
@@ -332,7 +330,8 @@ local function _process_rule(self, rule, collections, ctx)
 				collections.RULE = rule
 
 				local nondisrupt = rule.actions.nondisrupt or {}
-				for _, action in ipairs(nondisrupt) do
+				for i = 1, #nondisrupt do
+					local action = nondisrupt[i]
 					actions.nondisruptive_lookup[action.action](self, action.data, ctx, collections)
 				end
 
@@ -373,8 +372,8 @@ local function _merge_rulesets(self)
 	local default = _global_rulesets
 	local t = {}
 
-	for k, v in ipairs(default) do
-		t[v] = true
+	for k = 1, #default do
+		t[default[k]] = true
 	end
 
 	local rebuild_exception_table = false
@@ -384,9 +383,9 @@ local function _merge_rulesets(self)
 		local added_s = self._add_ruleset_string
 		local ignored = self._ignore_ruleset
 
-		for k, v in ipairs(added) do
+		for k = 1, #added do
 			--_LOG_"Adding ruleset " .. v
-			t[v] = true
+			t[added[k]] = true
 		end
 
 		for k, v in pairs(added_s) do
@@ -411,9 +410,9 @@ local function _merge_rulesets(self)
 			t[k] = true
 		end
 
-		for k, v in ipairs(ignored) do
+		for k = 1, #ignored do
 			--_LOG_"Ignoring ruleset " .. v
-			t[v] = nil
+			t[ignored[k]] = nil
 		end
 	end
 
@@ -513,7 +512,8 @@ function _M.exec(self, opts)
 
 	--_LOG_"Beginning run of phase " .. phase
 
-	for _, ruleset in ipairs(self._active_rulesets) do
+	for ii = 1, #self._active_rulesets do
+		local ruleset = self._active_rulesets[ii]
 		--_LOG_"Beginning ruleset " .. ruleset
 
 		local rs = _ruleset_defs[ruleset]
@@ -655,8 +655,8 @@ end
 -- configuraton wrapper for per-instance options
 function _M.set_option(self, option, value, data)
 	if type(value) == "table" then
-		for _, v in ipairs(value) do
-			_M.set_option(self, option, v, data)
+		for i = 1, #value do
+			_M.set_option(self, option, value[i], data)
 		end
 	else
 		if options.lookup[option] then
@@ -673,7 +673,8 @@ function _M.init()
 	-- do offset jump calculations for default rulesets
 	-- this is also lazily handled in exec() for rulesets
 	-- that dont appear here
-	for _, ruleset in ipairs(_global_rulesets) do
+	for i = 1, #_global_rulesets do
+		local ruleset = _global_rulesets[i]
 		local rs, err, calc
 
 		rs, err = util.load_ruleset_file(ruleset)
@@ -741,7 +742,8 @@ function _M.sieve_rule(self, id, sieves)
 		for phase, rules in pairs(ruleset) do
 			if self.target_update_map[id] then break end
 
-			for i, rule in ipairs(rules) do
+			for i = 1, #rules do
+				local rule = rules[i]
 				if rule.id == id then
 					orig_rule = rule
 					self.target_update_map[id] = util.table_copy(rule.vars)
@@ -751,7 +753,8 @@ function _M.sieve_rule(self, id, sieves)
 		end
 	end
 
-	for _, sieve in ipairs(sieves) do
+	for ii = 1, #sieves do
+		local sieve = sieves[ii]
 		local found
 		local arg = ""
 
