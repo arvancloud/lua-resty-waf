@@ -13,7 +13,6 @@ local transform_t   = require "resty.waf.transform"
 local translate     = require "resty.waf.translate"
 local util          = require "resty.waf.util"
 
-local table_insert = table.insert
 local table_sort   = table.sort
 local string_lower = string.lower
 
@@ -717,7 +716,7 @@ function _M.load_secrules(ruleset, opts, err_tab)
 				ngx.log(ngx.WARN, errs[i].err)
 				ngx.log(ngx.WARN, table.concat(errs[i].orig, "\n") .. "\n\n")
 			else
-				table_insert(err_tab, errs[i])
+				err_tab[#err_tab + 1] = errs[i]
 			end
 		end
 	end

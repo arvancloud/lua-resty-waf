@@ -8,7 +8,6 @@ local logger = require "resty.waf.log"
 local util   = require "resty.waf.util"
 
 local table_concat = table.concat
-local table_insert = table.insert
 
 _M.version = base.version
 
@@ -78,11 +77,11 @@ function _M.parse_request_body(waf, request_headers, collections)
 
 					local s, f = header:find(' name="([^"]+")')
 					file = header:sub(s + 7, f - 1)
-					table.insert(FILES_NAMES, file)
+					FILES_NAMES[#FILES_NAMES + 1] = file
 
 					s, f = header:find('filename="([^"]+")')
 					if s then 
-						table.insert(FILES, header:sub(s + 10, f - 1))
+						FILES[#FILES + 1] = header:sub(s + 10, f - 1)
 						is_file = true
 					else
 						is_file = false
@@ -110,7 +109,7 @@ function _M.parse_request_body(waf, request_headers, collections)
 
 				ngx.req.append_body(chunk)
 			elseif typ == "part_end" then
-				table.insert(FILES_SIZES, body_size)
+				FILES_SIZES[#FILES_SIZES + 1] = body_size
 				files_size = files_size + body_size
 				body_size = 0
 
@@ -219,7 +218,8 @@ function _M.common_args(collections)
 					t[k] = v
 				else
 					if type(t[k]) == "table" then
-						table_insert(t[k], v)
+						local t_k = t[k]
+						t_k[#t_k + 1] = v
 					else
 						local _v = t[k]
 						t[k] = { _v, v }

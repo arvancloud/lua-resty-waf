@@ -250,7 +250,8 @@ local function meta_exception(translation)
 			data   = true
 		}
 
-		table.insert(translation.actions.nondisrupt, action)
+		local translation_actions_nondisrupt = translation.actions.nondisrupt
+		translation_actions_nondisrupt[#translation_actions_nondisrupt + 1] = action
 	end
 end
 
@@ -272,7 +273,8 @@ local ctl_lookup = {
 			data   = mode,
 		}
 
-		table.insert(translation.actions.nondisrupt, action)
+		local translation_actions_nondisrupt = translation.actions.nondisrupt
+		translation_actions_nondisrupt[#translation_actions_nondisrupt + 1] = action
 	end,
 	ruleRemoveById = function(value, translation)
 		local action = {
@@ -280,16 +282,19 @@ local ctl_lookup = {
 			data   = value,
 		}
 
-		table.insert(translation.actions.nondisrupt, action)
+		local translation_actions_nondisrupt = translation.actions.nondisrupt
+		translation_actions_nondisrupt[#translation_actions_nondisrupt + 1] = action
 	end,
 	ruleRemoveByMsg = function(value, translation)
 		if not translation.exceptions then translation.exceptions = {} end
-		table.insert(translation.exceptions, value)
+		local translation_exceptions = translation.exceptions
+		translation_exceptions[#translation_exceptions + 1] = value
 		meta_exception(translation)
 	end,
 	ruleRemoveByTag = function(value, translation)
 		if not translation.exceptions then translation.exceptions = {} end
-		table.insert(translation.exceptions, value)
+		local translation_exceptions = translation.exceptions
+		translation_exceptions[#translation_exceptions + 1] = value
 		meta_exception(translation)
 	end,
 }
@@ -380,16 +385,16 @@ function _M.clean_input(input)
 			if re_match(line, pats.line_escape) then
 				-- strip the multi-line escape and surrounding whitespace
 				line = re_gsub(line, pats.line_escape, '')
-				table.insert(line_buf, line)
+				line_buf[#line_buf + 1] = line
 			else
 				-- either the end of a mutli line directive, or standalone line
 				-- push the buffer to the return array and clear the buffer
-				table.insert(line_buf, line)
+				line_buf[#line_buf + 1] = line
 
 				local final_line = table.concat(line_buf, ' ')
 
 				if _M.valid_line(final_line) then
-					table.insert(lines, final_line)
+					lines[#lines + 1] = final_line
 				end
 
 				line_buf = {}
@@ -428,7 +433,7 @@ function _M.tokenize(line)
 		-- remove any escaping backslashes from escaped quotes
 		token = str_gsub(token, [[\"]], [["]])
 
-		table.insert(tokens, token)
+		tokens[#tokens + 1] = token
 	until #line == 0
 
 	return tokens
@@ -445,7 +450,7 @@ function _M.parse_vars(raw_vars)
 
 	repeat
 		local chunk = table.remove(split_vars, 1)
-		table.insert(var_buf, chunk)
+		var_buf[#var_buf + 1] = chunk
 
 		if (not re_find(chunk, pats.elt_wrap)
 			or not str_find(chunk, ':', 1, true)) then
@@ -462,7 +467,7 @@ function _M.parse_vars(raw_vars)
 
 		if sentinal then
 			local token = table.concat(var_buf, '|')
-			table.insert(tokens, token)
+			tokens[#tokens + 1] = token
 			var_buf = {}
 			sentinal = false
 		end
@@ -499,20 +504,21 @@ function _M.parse_vars(raw_vars)
 			end
 
 			if not prev_parsed_var.ignore then prev_parsed_var.ignore = {} end
-			table.insert(prev_parsed_var.ignore, specific)
+			local prev_parsed_var_ignore = prev_parsed_var.ignore
+			prev_parsed_var_ignore[#prev_parsed_var_ignore + 1] = specific
 
 			parsed = prev_parsed_var
 			parsed.modifier = '!'
 
 			dopush = false
-			table.insert(parsed_vars, parsed)
+			parsed_vars[#parsed_vars + 1] = parsed
 		end
 
 		if dopush then
 			parsed.variable = var
 			if #specific > 0 then parsed.specific = specific end
 
-			table.insert(parsed_vars, parsed)
+			parsed_vars[#parsed_vars + 1] = parsed
 		end
 	end
 
@@ -554,7 +560,7 @@ function _M.parse_actions(raw_actions)
 
 		if not chunk then break end
 
-		table.insert(action_buf, chunk)
+		action_buf[#action_buf + 1] = chunk
 
 		if (not string.find(chunk, "'", 1, true)
 			or not string.find(chunk, ':', 1, true)) then
@@ -571,7 +577,7 @@ function _M.parse_actions(raw_actions)
 
 		if sentinal then
 			local token = table.concat(action_buf, ',')
-			table.insert(tokens, token)
+			tokens[#tokens + 1] = token
 			action_buf = {}
 			sentinal = false
 		end
@@ -594,7 +600,7 @@ function _M.parse_actions(raw_actions)
 			parsed.value = _M.strip_encap_quotes(value)
 		end
 
-		table.insert(parsed_actions, parsed)
+		parsed_actions[#parsed_actions + 1] = parsed
 	end
 
 	return parsed_actions
@@ -632,7 +638,7 @@ function _M.build_chains(rules)
 	for i = 1, #rules do
 		local rule = rules[i]
 
-		table.insert(chain, rule)
+		chain[#chain + 1] = rule
 
 		local is_chain
 		if type(rule.actions) == 'table' then
@@ -643,7 +649,7 @@ function _M.build_chains(rules)
 		end
 
 		if not is_chain then
-			table.insert(chains, chain)
+			chains[#chains + 1] = chain
 			chain = {}
 		end
 	end
@@ -701,7 +707,8 @@ function _M.translate_vars(rule, translation, opts)
 					if type(translated_var.ignore) ~= 'table' then
 						translated_var.ignore = {}
 					end
-					table.insert(translated_var.ignore, { key, elt })
+					local translated_var_ignore = translated_var.ignore
+					translated_var_ignore[#translated_var_ignore + 1] = { key, elt }
 				end
 			elseif #specific > 0 then
 				local key = specific_regex and 'regex' or 'specific'
@@ -716,7 +723,8 @@ function _M.translate_vars(rule, translation, opts)
 			end
 
 			if type(translation.vars) ~= 'table' then translation.vars = {} end
-			table.insert(translation.vars, translated_var)
+			local translation_vars = translation.vars
+			translation_vars[#translation_vars + 1] = translated_var
 		end)
 
 		if err then
@@ -772,7 +780,7 @@ function _M.translate_operator(rule, translation, path)
 			if str_find(line, [[^%s*#]]) then skip = true end
 
 			if not skip then
-				table.insert(buffer, line)
+				buffer[#buffer + 1] = line
 			end
 		end
 
@@ -881,7 +889,8 @@ function _M.translate_actions(rule, translation, opts)
 						time = time
 					}
 				}
-				table.insert(translation.actions.nondisrupt, e)
+				local translation_actions_nondisrupt = translation.actions.nondisrupt
+				translation_actions_nondisrupt[#translation_actions_nondisrupt + 1] = e
 				return
 			end
 			if key == 'initcol' then
@@ -895,7 +904,8 @@ function _M.translate_actions(rule, translation, opts)
 						value = _M.translate_macro(val)
 					}
 				}
-				table.insert(translation.actions.nondisrupt, e)
+				local translation_actions_nondisrupt = translation.actions.nondisrupt
+				translation_actions_nondisrupt[#translation_actions_nondisrupt + 1] = e
 				return
 			end
 			if key == 'logdata' then
@@ -936,7 +946,8 @@ function _M.translate_actions(rule, translation, opts)
 								key = string.upper(element)
 							}
 						}
-						table.insert(translation.actions.nondisrupt, e)
+						local translation_actions_nondisrupt = translation.actions.nondisrupt
+						translation_actions_nondisrupt[#translation_actions_nondisrupt + 1] = e
 						return
 					else
 						val = 1
@@ -956,7 +967,8 @@ function _M.translate_actions(rule, translation, opts)
 					action = 'setvar',
 					data = setvar
 				}
-				table.insert(translation.actions.nondisrupt, e)
+				local translation_actions_nondisrupt = translation.actions.nondisrupt
+				translation_actions_nondisrupt[#translation_actions_nondisrupt + 1] = e
 				return
 			end
 			if key == 'status' then
@@ -964,7 +976,8 @@ function _M.translate_actions(rule, translation, opts)
 					action = 'status',
 					data = tonumber(value)
 				}
-				table.insert(translation.actions.nondisrupt, e)
+				local translation_actions_nondisrupt = translation.actions.nondisrupt
+				translation_actions_nondisrupt[#translation_actions_nondisrupt + 1] = e
 				return
 			end
 			if key == 'pause' then
@@ -972,7 +985,8 @@ function _M.translate_actions(rule, translation, opts)
 					action = 'sleep',
 					data = tonumber(value) / 1000
 				}
-				table.insert(translation.actions.nondisrupt, e)
+				local translation_actions_nondisrupt = translation.actions.nondisrupt
+				translation_actions_nondisrupt[#translation_actions_nondisrupt + 1] = e
 				return
 			end
 			if key == 't' then
@@ -981,12 +995,14 @@ function _M.translate_actions(rule, translation, opts)
 				if not transform then
 					error("Cannot perform transform " .. value)
 				end
-				table.insert(translation.opts.transform, transform)
+				local translation_opts_transform = translation.opts.transform
+				translation_opts_transform[#translation_opts_transform + 1] = transform
 				return
 			end
 			if key == 'tag' then
 				if not translation.tag then translation.tag = {} end
-				table.insert(translation.tag, _M.translate_macro(value))
+				local translation_tag = translation.tag
+				translation_tag[#translation_tag + 1] = _M.translate_macro(value)
 				return
 			end
 
@@ -1088,7 +1104,7 @@ function _M.translate_chain(chain, opts)
 			translation.opts = nil
 		end
 
-		table.insert(lua_resty_waf_chain, translation)
+		lua_resty_waf_chain[#lua_resty_waf_chain + 1] = translation
 	end
 
 	return lua_resty_waf_chain
@@ -1122,17 +1138,18 @@ function _M.translate_chains(chains, opts)
 			local phase = _M.figure_phase(translation)
 
 			for j = 1, #translation do
-				table.insert(lua_resty_waf_chains[phase], translation[j])
+				local lua_resty_waf_chains_phase = lua_resty_waf_chains[phase]
+				lua_resty_waf_chains_phase[#lua_resty_waf_chains_phase + 1] = translation[j]
 			end
 		end)
 
 		if err then
 			local origs = {}
 			for j = 1, #chain do
-				table.insert(origs, chain[j].original)
+				origs[j] = chain[j].original
 			end
 
-			table.insert(errs, { err = err, orig = origs })
+			errs[#errs + 1] = { err = err, orig = origs }
 		end
 	end
 

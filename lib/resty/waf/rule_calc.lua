@@ -3,7 +3,6 @@ local _M = {}
 local base = require "resty.waf.base"
 
 local table_concat = table.concat
-local table_insert = table.insert
 
 _M.version = base.version
 
@@ -23,7 +22,7 @@ local function _ignore_collection_key(ignore)
 	local t = {}
 
 	for i, j in ipairs(ignore) do
-		table_insert(t, table_concat(j, ','))
+		t[i + 1] = table_concat(j, ',')
 	end
 
 	return table_concat(t, ',')
@@ -34,15 +33,15 @@ local function _build_collection_key(var, transform)
 	key[1] = tostring(var.type)
 
 	if var.parse ~= nil then
-		table_insert(key, tostring(var.parse[1]))
-		table_insert(key, tostring(var.parse[2]))
+		key[2] = tostring(var.parse[1])
+		key[3] = tostring(var.parse[2])
 	end
 
 	if var.ignore ~= nil then
-		table_insert(key, tostring(_ignore_collection_key(var.ignore)))
+		key[#key + 1] = tostring(_ignore_collection_key(var.ignore))
 	end
 
-	table_insert(key, tostring(_transform_collection_key(transform)))
+	key[#key + 1] = tostring(_transform_collection_key(transform))
 
 	return table_concat(key, "|")
 end
@@ -134,7 +133,8 @@ function _M.calculate(ruleset, meta_lookup)
 				if not meta_lookup.msgs[msg] then
 					meta_lookup.msgs[msg] = { rule.id }
 				else
-					table_insert(meta_lookup.msgs[msg], rule.id)
+					local meta_lookup_msgs_msg = meta_lookup.msgs[msg]
+					meta_lookup_msgs_msg[#meta_lookup_msgs_msg + 1] = rule.id
 				end
 			end
 
@@ -143,7 +143,8 @@ function _M.calculate(ruleset, meta_lookup)
 					if not meta_lookup.tags[tag] then
 						meta_lookup.tags[tag] = { rule.id }
 					else
-						table_insert(meta_lookup.tags[tag], rule.id)
+						local meta_lookup_tags_tag = meta_lookup.tags[tag]
+						meta_lookup_tags_tag[#meta_lookup_tags_tag + 1] = rule.id
 					end
 				end
 			end
