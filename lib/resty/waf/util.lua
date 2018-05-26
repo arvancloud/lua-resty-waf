@@ -14,6 +14,7 @@ local string_gsub   = string.gsub
 local string_match  = string.match
 local string_sub    = string.sub
 local string_upper  = string.upper
+local string_lower  = string.lower
 local table_concat  = table.concat
 
 _M.version = base.version
@@ -136,7 +137,7 @@ function _M.parse_dynamic_value(waf, key, collections)
 		if type(lval) == "table" then
 			if specific then
 				return lval[specific] and tostring(lval[specific]) or
-					tostring(lval[string.lower(specific)])
+					tostring(lval[string_lower(specific)])
 			else
 				return val
 			end
@@ -235,7 +236,7 @@ _M.parse_collection = {
 		local _collection = {}
 		for k, _ in pairs(collection) do
 			--_LOG_"checking " .. k
-			if ngx.re.find(k, value, waf._pcre_flags) then
+			if re_find(k, value, waf._pcre_flags) then
 				v = collection[k]
 				if type(v) == "table" then
 					for __, _v in pairs(v) do
@@ -284,7 +285,7 @@ _M.sieve_collection = {
 		--_LOG_"Sieveing regex value " .. value
 		for k, _ in pairs(collection) do
 			--_LOG_"Checking " .. k
-			if ngx.re.find(k, value, waf._pcre_flags) then
+			if re_find(k, value, waf._pcre_flags) then
 				--_LOG_"Removing " .. k
 				collection[k] = nil
 			end

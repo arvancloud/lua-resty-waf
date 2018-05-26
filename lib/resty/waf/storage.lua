@@ -130,13 +130,14 @@ function _M.persist(waf, storage)
 
 	--_LOG_'Persisting storage type ' .. backend
 
+	local backend_m_persist = backend_m.persist
 	for col in pairs(storage) do
 		if col ~= 'TX' then
 			--_LOG_'Examining ' .. col
 
 			if storage[col]["__altered"] then
 				storage[col]["__altered"] = nil -- dont need to persist this flag
-				backend_m.persist(waf, col, storage[col])
+				backend_m_persist(waf, col, storage[col])
 			else
 				--_LOG_"Not persisting a collection that wasn't altered"
 			end

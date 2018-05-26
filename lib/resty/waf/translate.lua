@@ -12,6 +12,12 @@ local re_gsub   = rex.gsub
 local str_fmt  = string.format
 local str_find = string.find
 local str_gsub = string.gsub
+local string_sub = string.sub
+local string_upper = string.upper
+local string_lower = string.lower
+
+local table_remove = table.remove
+local table_concat = table.concat
 
 local pats = {}
 
@@ -323,13 +329,13 @@ function _M.translate_macro(string)
 		local specific = t[2]
 		local replacement
 
-		local lookup = table_copy(valid_vars[string.upper(key)])
+		local lookup = table_copy(valid_vars[string_upper(key)])
 
 		if lookup then
 			replacement = lookup.type
 
 			if lookup.storage then
-				replacement = replacement .. '.' .. string.upper(specific)
+				replacement = replacement .. '.' .. string_upper(specific)
 			else
 				if lookup.parse and lookup.parse[1] == 'specific' then
 					replacement = replacement .. '.' .. lookup.parse[2]
@@ -391,7 +397,7 @@ function _M.clean_input(input)
 				-- push the buffer to the return array and clear the buffer
 				line_buf[#line_buf + 1] = line
 
-				local final_line = table.concat(line_buf, ' ')
+				local final_line = table_concat(line_buf, ' ')
 
 				if _M.valid_line(final_line) then
 					lines[#lines + 1] = final_line
@@ -449,7 +455,7 @@ function _M.parse_vars(raw_vars)
 	local split_vars = split(raw_vars, '|')
 
 	repeat
-		local chunk = table.remove(split_vars, 1)
+		local chunk = table_remove(split_vars, 1)
 		var_buf[#var_buf + 1] = chunk
 
 		if (not re_find(chunk, pats.elt_wrap)
@@ -466,7 +472,7 @@ function _M.parse_vars(raw_vars)
 		end
 
 		if sentinal then
-			local token = table.concat(var_buf, '|')
+			local token = table_concat(var_buf, '|')
 			tokens[#tokens + 1] = token
 			var_buf = {}
 			sentinal = false
@@ -477,24 +483,24 @@ function _M.parse_vars(raw_vars)
 		local token = tokens[i]
 
 		local token_parts = split(token, ':')
-		local var = table.remove(token_parts, 1)
-		local specific = table.concat(token_parts, ':')
+		local var = table_remove(token_parts, 1)
+		local specific = table_concat(token_parts, ':')
 
 		local parsed = {}
 		local modifier
 
 		local dopush = true
 
-		if string.find(var, '&', 1, true) then
-			var = string.sub(var, 2, #var)
+		if str_find(var, '&', 1, true) then
+			var = string_sub(var, 2, #var)
 			parsed.modifier = '&'
 		end
 
-		if string.find(var, '!', 1, true) then
-			var = string.sub(var, 2, #var)
+		if str_find(var, '!', 1, true) then
+			var = string_sub(var, 2, #var)
 			parsed.modifier = '!'
 
-			local prev_parsed_var = table.remove(parsed_vars)
+			local prev_parsed_var = table_remove(parsed_vars)
 
 			if not prev_parsed_var then error("no prev var") end
 
@@ -556,17 +562,17 @@ function _M.parse_actions(raw_actions)
 	if not split_actions then return {} end
 
 	repeat
-		local chunk = table.remove(split_actions, 1)
+		local chunk = table_remove(split_actions, 1)
 
 		if not chunk then break end
 
 		action_buf[#action_buf + 1] = chunk
 
-		if (not string.find(chunk, "'", 1, true)
-			or not string.find(chunk, ':', 1, true)) then
+		if (not str_find(chunk, "'", 1, true)
+			or not str_find(chunk, ':', 1, true)) then
 
 			local inbuf = (#action_buf > 1
-				and string.find(action_buf[1], "'", 1, true))
+				and str_find(action_buf[1], "'", 1, true))
 
 			if not inbuf then sentinal = true end
 		end
@@ -576,7 +582,7 @@ function _M.parse_actions(raw_actions)
 		end
 
 		if sentinal then
-			local token = table.concat(action_buf, ',')
+			local token = table_concat(action_buf, ',')
 			tokens[#tokens + 1] = token
 			action_buf = {}
 			sentinal = false
@@ -587,8 +593,8 @@ function _M.parse_actions(raw_actions)
 		local token = tokens[i]
 
 		local token_parts = split(token, ':')
-		local action = table.remove(token_parts, 1)
-		local value = table.concat(token_parts, ':')
+		local action = table_remove(token_parts, 1)
+		local value = table_concat(token_parts, ':')
 
 		action = re_gsub(action, pats.trim_whitespace, '')
 
@@ -610,14 +616,14 @@ function _M.parse_tokens(tokens)
 	local entry, directive, vars, operator, actions
 	entry = {}
 
-	entry["original"] = table.concat(tokens, ' ')
+	entry["original"] = table_concat(tokens, ' ')
 
-	directive = table.remove(tokens, 1)
+	directive = table_remove(tokens, 1)
 	if directive == 'SecRule' then
-		vars = table.remove(tokens, 1)
-		operator = table.remove(tokens, 1)
+		vars = table_remove(tokens, 1)
+		operator = table_remove(tokens, 1)
 	end
-	actions = table.remove(tokens)
+	actions = table_remove(tokens)
 
 	if #tokens ~= 0 then error(#tokens .. " tokens when we should have 0") end
 
@@ -702,7 +708,7 @@ function _M.translate_vars(rule, translation, opts)
 					end
 
 					local key = elt_regex and 'regex' or 'ignore'
-					if lookup_var.storage then elt = string.upper(elt) end
+					if lookup_var.storage then elt = string_upper(elt) end
 
 					if type(translated_var.ignore) ~= 'table' then
 						translated_var.ignore = {}
@@ -713,7 +719,7 @@ function _M.translate_vars(rule, translation, opts)
 			elseif #specific > 0 then
 				local key = specific_regex and 'regex' or 'specific'
 
-				if lookup_var.storage then specific = string.upper(specific) end
+				if lookup_var.storage then specific = string_upper(specific) end
 
 				translated_var.parse = { key, specific }
 			end
@@ -848,7 +854,7 @@ function _M.translate_actions(rule, translation, opts)
 			if silent_actions[key] then return end
 
 			if disruptive_actions[key] then
-				translation.action = string.upper(action_lookup[key])
+				translation.action = string_upper(action_lookup[key])
 				return
 			end
 			if direct_translation_actions[key] then
@@ -884,8 +890,8 @@ function _M.translate_actions(rule, translation, opts)
 				local e = {
 					action = 'expirevar',
 					data = {
-						col = string.upper(collection),
-						key = string.upper(element),
+						col = string_upper(collection),
+						key = string_upper(element),
 						time = time
 					}
 				}
@@ -900,7 +906,7 @@ function _M.translate_actions(rule, translation, opts)
 				local e = {
 					action = 'initcol',
 					data = {
-						col = string.upper(col),
+						col = string_upper(col),
 						value = _M.translate_macro(val)
 					}
 				}
@@ -933,17 +939,17 @@ function _M.translate_actions(rule, translation, opts)
 				local var = t[1]
 				local val = t[2]
 				local tt = split(var, "%.")
-				local collection = table.remove(tt, 1)
-				local element = table.concat(tt, '.')
+				local collection = table_remove(tt, 1)
+				local element = table_concat(tt, '.')
 				-- delete
 				if not val then
 					if str_find(var, [=[^!]=]) then
-						collection = string.sub(collection, 2, #collection)
+						collection = string_sub(collection, 2, #collection)
 						local e = {
 							action = 'deletevar',
 							data = {
-								col = string.upper(collection),
-								key = string.upper(element)
+								col = string_upper(collection),
+								key = string_upper(element)
 							}
 						}
 						local translation_actions_nondisrupt = translation.actions.nondisrupt
@@ -954,12 +960,12 @@ function _M.translate_actions(rule, translation, opts)
 					end
 				end
 				local setvar = {
-					col = string.upper(collection),
-					key = string.upper(element)
+					col = string_upper(collection),
+					key = string_upper(element)
 				}
 				if str_find(val, [=[^%+]=]) then
 					setvar.inc = true
-					val = string.sub(val, 2, #val)
+					val = string_sub(val, 2, #val)
 				end
 				setvar.value = tonumber(val) and tonumber(val)
 					or _M.translate_macro(val)
@@ -991,7 +997,7 @@ function _M.translate_actions(rule, translation, opts)
 			end
 			if key == 't' then
 				if value == 'none' then return end
-				local transform = valid_transforms[string.lower(value)]
+				local transform = valid_transforms[string_lower(value)]
 				if not transform then
 					error("Cannot perform transform " .. value)
 				end
@@ -1049,7 +1055,7 @@ function _M.translate_chain(chain, opts)
 			if directive == 'SecMarker' then
 				translation.op_negated = true
 
-				local marker = table.remove(rule.actions, 1)
+				local marker = table_remove(rule.actions, 1)
 				translation.id = marker.action
 			end
 		end

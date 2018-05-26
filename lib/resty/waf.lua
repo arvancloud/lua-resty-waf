@@ -62,10 +62,11 @@ local function _build_exception_table()
 	-- build a rule.id -> { rule.id, ... } lookup table based on the exception
 	-- action for the rule
 
+	local util_rule_exception = util.rule_exception
 	for r, ruleset in pairs(_ruleset_defs) do
 		for phase, rules in pairs(ruleset) do
 			for i = 1, #rules do
-				util.rule_exception(_M._meta_exception, rules[i])
+				util_rule_exception(_M._meta_exception, rules[i])
 			end
 		end
 	end
@@ -358,9 +359,10 @@ end
 
 -- calculate rule jump offsets
 local function _calculate_offset(ruleset)
+	local calc_calculate = calc.calculate
 	for phase, i in pairs(phase_t.phases) do
 		if ruleset[phase] then
-			calc.calculate(ruleset[phase], _M._meta_exception)
+			calc_calculate(ruleset[phase], _M._meta_exception)
 		else
 			ruleset[phase] = {}
 		end
@@ -388,11 +390,12 @@ local function _merge_rulesets(self)
 			t[added[k]] = true
 		end
 
+		local util_parse_ruleset = util.parse_ruleset
 		for k, v in pairs(added_s) do
 			--_LOG_"Adding ruleset string " .. k
 
 			if not _ruleset_defs[k] then
-				local rs, err = util.parse_ruleset(v)
+				local rs, err = util_parse_ruleset(v)
 
 				if err then
 					logger.fatal_fail("Could not load " .. k)
@@ -485,11 +488,13 @@ function _M.exec(self, opts)
 	-- (e.g. multiple chunks are going through body_filter)
 	if ctx.short_circuit then return end
 
+	local util_parse_dynamic_value = util.parse_dynamic_value
+	local storage_set_var = storage.set_var
 	for i = 1, self.var_count do
 		local data  = self.var[i]
-		local value = util.parse_dynamic_value(self, data.value, collections)
+		local value = util_parse_dynamic_value(self, data.value, collections)
 
-		storage.set_var(self, ctx, data, value)
+		storage_set_var(self, ctx, data, value)
 	end
 
 	-- store the collections table in ctx, which will get saved to ngx.ctx
@@ -512,6 +517,8 @@ function _M.exec(self, opts)
 
 	--_LOG_"Beginning run of phase " .. phase
 
+	local util_load_ruleset_file = util.load_ruleset_file
+	local util_table_has_key = util.table_has_key
 	for ii = 1, #self._active_rulesets do
 		local ruleset = self._active_rulesets[ii]
 		--_LOG_"Beginning ruleset " .. ruleset
@@ -520,7 +527,7 @@ function _M.exec(self, opts)
 
 		if not rs then
 			local err
-			rs, err = util.load_ruleset_file(ruleset)
+			rs, err = util_load_ruleset_file(ruleset)
 
 			if err then
 				logger.fatal_fail(err)
@@ -539,7 +546,7 @@ function _M.exec(self, opts)
 		local rule   = rs[phase][offset]
 
 		while rule do
-			if not util.table_has_key(rule.id, self._ignore_rule) then
+			if not util_table_has_key(rule.id, self._ignore_rule) then
 				--_LOG_"Processing rule " .. rule.id
 
 				local returned_offset = _process_rule(self, rule, collections, ctx)
@@ -673,11 +680,12 @@ function _M.init()
 	-- do offset jump calculations for default rulesets
 	-- this is also lazily handled in exec() for rulesets
 	-- that dont appear here
+	local util_load_ruleset_file = util.load_ruleset_file
 	for i = 1, #_global_rulesets do
 		local ruleset = _global_rulesets[i]
 		local rs, err, calc
 
-		rs, err = util.load_ruleset_file(ruleset)
+		rs, err = util_load_ruleset_file(ruleset)
 
 		if err then
 			ngx.log(ngx.ERR, err)
@@ -753,6 +761,7 @@ function _M.sieve_rule(self, id, sieves)
 		end
 	end
 
+	local calc_build_collection_key = calc.build_collection_key
 	for ii = 1, #sieves do
 		local sieve = sieves[ii]
 		local found
@@ -778,10 +787,7 @@ function _M.sieve_rule(self, id, sieves)
 				end
 
 				-- set/update the var's collection key
-				self.target_update_map[id][i].collection_key =
-					calc.build_collection_key(
-						self.target_update_map[id][i],
-						orig_rule.opts.transform)
+				self.target_update_map[id][i].collection_key = calc_build_collection_key(self.target_update_map[id][i], orig_rule.opts.transform)
 
 				found = true
 				break
