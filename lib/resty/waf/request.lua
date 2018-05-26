@@ -19,7 +19,7 @@ function _M.parse_request_body(waf, request_headers, collections)
 	-- this or adding an option to disable this checking in the future
 	if type(content_type_header) == "table" then
 		--_LOG_"Request contained multiple content-type headers, bailing!"
-		ngx.exit(400)
+		return ngx.exit(400)
 	end
 
 	-- ignore the request body if no Content-Type header is sent
