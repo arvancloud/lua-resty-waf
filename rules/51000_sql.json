@@ -501,7 +501,7 @@
             "opts": {
                 "transform": "uri_decode"
             },
-            "pattern": "(?:sqlite((_temp)?_master)|_version\\s*\\())",
+            "pattern": "(?:sqlite((_temp)?_master)|_version\\s*\\()",
             "vars": [
                 {
                     "parse": [
@@ -565,7 +565,7 @@
             "opts": {
                 "transform": "uri_decode"
             },
-            "pattern": "(?:(?:\\b(?:(?:select\\b.{0,40}\\b(?:substring|users?|ascii))|m(?:sys(?:(?:queri|ac)e|relationship|column|object)s|ysql\\.(db|user))|c(?:onstraint_type|harindex)|waitfor\\b\\W*?\\bdelay|attnotnull)\\b|(?:locate|instr)\\W+\\()|\\@\\@spid\\b)|\\b(?:(?:s(?:ys(?:(?:(?:process|tabl)e|filegroup|object)s|c(?:o(?:nstraint|lumn)s|at)|dba|ibm)|ubstr(?:ing)?)|user_(?:(?:(?:constrain|objec)t|tab(?:_column|le)|ind_column|user)s|password|group)|a(?:tt(?:rel|typ)id|ll_objects)|object_(?:(?:nam|typ)e|id)|pg_(?:attribute|class)|column_(?:name|id)|xtype\\W+\\bchar|mb_users|rownum)\\b|t(?:able_name\\b|extpos\\W+\\()))",
+            "pattern": "(?:(?:\\b(?:(?:select\\b.{0,40}\\b(?:substring|users?|ascii))))|m(?:sys(?:(?:queri|ac)e|relationship|column|object)s|ysql\\.(db|user))|c(?:onstraint_type|harindex)|waitfor\\b\\W*?\\bdelay|attnotnull)\\b|(?:locate|instr)\\W+\\(|\\@\\@spid\\b|\\b(?:(?:s(?:ys(?:(?:(?:process|tabl))e|filegroup|object)s|c(?:o(?:nstraint|lumn)s|at)|dba|ibm)|ubstr(?:ing)?)|user_(?:(?:(?:constrain|objec)t|tab(?:_column|le)|ind_column|user)s|password|group)|a(?:tt(?:rel|typ)id|ll_objects)|object_(?:(?:nam|typ)e|id)|pg_(?:attribute|class)|column_(?:name|id)|xtype\\W+\\bchar|mb_users|rownum\\b|t(?:able_name\\b|extpos\\W+\\())",
             "vars": [
                 {
                     "parse": [
@@ -597,7 +597,7 @@
             "opts": {
                 "transform": "uri_decode"
             },
-            "pattern": "(?:(?:\\b((substr(?:ing)?\\s*\\()|object_(?:(?:nam|typ)e|id)|column_(?:name|id)|xtype\\W+\\bchar|mb_users|waitfor\\b\\W*?\\bdelay)\\b|\\@\\@spid\\b)|table_name\\b|charindex\\s*((\\\" | ').*(\\\"|')\\s*, )",
+            "pattern": "(?:(?:\\b((substr(?:ing)?\\s*\\(|object_(?:(?:nam|typ)e|id)))))|column_(?:name|id)|xtype\\W+\\bchar|mb_users|waitfor\\b\\W*?\\bdelay\\b|\\@\\@spid\\b|table_name\\b|charindex\\s*((\\\" | ').*(\\\"|')\\s*, )",
             "vars": [
                 {
                     "parse": [
