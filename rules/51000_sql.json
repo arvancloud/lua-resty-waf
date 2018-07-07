@@ -17,7 +17,7 @@
             },
             "id": 51001,
             "msg": "Common SQL Comment Sequence",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -49,7 +49,7 @@
             },
             "id": 51002,
             "msg": "MySQL Comment Sequence",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -81,7 +81,7 @@
             },
             "id": 51003,
             "msg": "MSAccess Comment Sequence",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -113,7 +113,7 @@
             },
             "id": 51004,
             "msg": "SQL Hex Encoding or Decoding",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -145,7 +145,7 @@
             },
             "id": 51005,
             "msg": "SQL String Termination with ' ",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -177,7 +177,7 @@
             },
             "id": 51006,
             "msg": "SQL String Termination with `´",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -209,7 +209,7 @@
             },
             "id": 51007,
             "msg": "SQL String Termination with ’‘",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -241,7 +241,7 @@
             },
             "id": 51008,
             "msg": "SQL String Termination with ;",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -273,7 +273,7 @@
             },
             "id": 51009,
             "msg": "SQL Basic Logic Operators",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -305,7 +305,7 @@
             },
             "id": 51010,
             "msg": "SQL ascii Logic Operators",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -337,7 +337,7 @@
             },
             "id": 51011,
             "msg": "SQL Tautologies",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -369,7 +369,7 @@
             },
             "id": 51012,
             "msg": "MSAccess Common database name detected",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -401,7 +401,7 @@
             },
             "id": 51013,
             "msg": "MSSQL Common database name detected",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -433,7 +433,7 @@
             },
             "id": 51014,
             "msg": "MySQL Common database name detected",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -465,7 +465,7 @@
             },
             "id": 51015,
             "msg": "PostgreSQL Common database name detected",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -497,7 +497,7 @@
             },
             "id": 51016,
             "msg": "SQLite database name detected",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -529,7 +529,7 @@
             },
             "id": 51017,
             "msg": "Oracle database name detected",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -561,7 +561,7 @@
             },
             "id": 51018,
             "msg": "Common Blind SQL Injection attempt",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -593,7 +593,7 @@
             },
             "id": 51019,
             "msg": "MSSQL Blind SQL Injection attempt",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -625,7 +625,7 @@
             },
             "id": 51020,
             "msg": "MSAccess Blind SQL Injection attempt",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -657,7 +657,7 @@
             },
             "id": 51021,
             "msg": "Oracle Blind SQL Injection attempt",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -689,7 +689,7 @@
             },
             "id": 51022,
             "msg": "PostgreSQL Blind SQL Injection attempt",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -721,7 +721,7 @@
             },
             "id": 51023,
             "msg": "MySQL Blind SQL Injection attempt",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -753,7 +753,7 @@
             },
             "id": 51024,
             "msg": "SQL Injection attempt",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -785,7 +785,7 @@
             },
             "id": 51025,
             "msg": "SQL Injection payload",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -817,7 +817,7 @@
             },
             "id": 51026,
             "msg": "MySQL Injection timebase",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -849,7 +849,7 @@
             },
             "id": 51027,
             "msg": "Oracle Injection timebase",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -881,7 +881,7 @@
             },
             "id": 51028,
             "msg": "MySQL comment-/space-obfuscated injections and backtick termination",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -913,7 +913,7 @@
             },
             "id": 51029,
             "msg": "Chained SQL injection",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -945,7 +945,7 @@
             },
             "id": 51030,
             "msg": "Conditional SQL injection",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -977,7 +977,7 @@
             },
             "id": 51031,
             "msg": "MySQL charset switch attempt",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -1009,7 +1009,7 @@
             },
             "id": 51032,
             "msg": "Oracle or DB2 MERGE, EXECUTE, IMMEDIATE, HAVING injections",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -1041,7 +1041,7 @@
             },
             "id": 51033,
             "msg": "SQL injection (authentication bypass)",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -1073,7 +1073,7 @@
             },
             "id": 51034,
             "msg": "Common SQL injection",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -1105,7 +1105,7 @@
             },
             "id": 51035,
             "msg": "Posgres pg_sleep injection",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -1137,7 +1137,7 @@
             },
             "id": 51036,
             "msg": "MySQL comment and char injection",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -1169,7 +1169,7 @@
             },
             "id": 51037,
             "msg": "SQL probing attempt",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -1201,7 +1201,7 @@
             },
             "id": 51038,
             "msg": " SQL injection (authentication bypass)",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -1233,7 +1233,7 @@
             },
             "id": 51039,
             "msg": "Concatenated SQL injection / SQLLFI",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
@@ -1265,7 +1265,7 @@
             },
             "id": 51040,
             "msg": "SQL probing attempt",
-            "operator": "REFIND",
+            "operator": "RESUB",
             "opts": {
                 "transform": "uri_decode"
             },
