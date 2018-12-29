@@ -15,6 +15,10 @@ local function split(source, delimiter)
 	return elements
 end
 
+local function strip_log(t)
+	t['uri_args'] = nil
+end
+
 -- warn logger
 function _M.warn(waf, msg)
 	ngx.log(ngx.WARN, '[', waf.transaction_id, '] ', msg)
@@ -49,9 +53,11 @@ end
 -- event log writer lookup table
 _M.write_log_events = {
 	error = function(waf, t)
+		strip_log(t)
 		ngx.log(waf._event_log_level, cjson.encode(t))
 	end,
 	file = function(waf, t)
+		strip_log(t)
 		if not waf._event_log_target_path then
 			_M.fatal_fail("Event log target path is undefined in file logger")
 		end
@@ -67,6 +73,7 @@ _M.write_log_events = {
 		f:close()
 	end,
 	socket = function(waf, t)
+		strip_log(t)
 		if not socket_logger.initted() then
 			socket_logger.init({
 				host           = waf._event_log_target_host,
